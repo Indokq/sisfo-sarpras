@@ -18,6 +18,7 @@ class Peminjaman extends Model
         'alasan_meminjam',
         'jumlah',
         'tanggal_pinjam',
+        'tanggal_kembali',
         'status',
     ];
 

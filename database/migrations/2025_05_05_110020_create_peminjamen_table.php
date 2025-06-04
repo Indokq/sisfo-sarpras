@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('nama_peminjam');              // dari form user
             $table->text('alasan_meminjam');
             $table->integer('jumlah');                    // jumlah barang dipinjam
-            $table->date('tanggal_pinjam');               // tanggal mulai pinjam
+            $table->date('tanggal_pinjam');      
+            $table->date('tanggal_kembali');         // tanggal mulai pinjam
             $table->enum('status', ['pending', 'approved', 'rejected', 'returned'])->default('pending');
             $table->timestamps();
         

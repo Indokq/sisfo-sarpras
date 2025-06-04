@@ -12,17 +12,6 @@ class PengembalianController extends Controller
 {
     public function store(Request $request)
     {
-        // Validasi user, hanya bisa membuat pengembalian untuk peminjaman miliknya sendiri
-        if (!$request->user()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized. User not authenticated.'
-            ], 401);
-        }
-
-        // Ambil user_id dari user yang sedang login
-        $userId = $request->user()->id;
-
         $validated = $request->validate([
             'peminjaman_id' => 'required|exists:peminjamans,id',
             'tanggal_pengembalian' => 'required|date',
@@ -32,16 +21,7 @@ class PengembalianController extends Controller
             'denda' => 'nullable|numeric|min:0',
         ]);
 
-        // Cari peminjaman dan pastikan milik user yang sedang login
         $peminjaman = Peminjaman::with('barang.stok')->findOrFail($validated['peminjaman_id']);
-
-        // Validasi bahwa peminjaman ini milik user yang sedang login
-        if ($peminjaman->user_id !== $userId) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized. You can only return your own borrowed items.'
-            ], 403);
-        }
 
         if ($peminjaman->status === 'returned') {
             return response()->json([
